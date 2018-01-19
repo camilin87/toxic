@@ -1,0 +1,16 @@
+#!/bin/bash
+. toxic-common.sh
+
+err=0
+while [ $err == 0 ]; do
+  if [ "${TOXIC_AUTO_UPGRADE}" = "1" ]; then
+    # The following yum example shows how to have toxic auto-upgrade itself upon restart.
+    # This will need customized in most cases.
+    sudo yum clean expire-cache
+    sudo yum install -y toxic
+  fi
+  #baseToxicCmd="${baseToxicCmd} -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=9010"
+  cmd="${baseToxicCmd} toxic.ToxicServer $otherArgs"
+  $cmd
+  err=$?
+done
