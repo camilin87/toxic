@@ -27,7 +27,6 @@ The primary users of this project are devops staff looking to automate tasks, su
 ### Tasks
 
 * Groovy tasks - Arbitrary Groovy script. The most flexible type of task, but requires Java or Groovy coding knowledge.
-
 * XML tasks - An XML request. This can actually be raw TCP data, but most users will use this task to feed XML or HTML content to a server for automated testing. This task can also look for a corresponding response and perform comparisons to validate that the actual server response matches the expected response.
 * Properties tasks - key/value pairs following the standard Java Properties format
 * File tasks - Useful for comparing text files to each other.
