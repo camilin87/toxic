@@ -85,7 +85,8 @@ public class PauseManagerTest {
       }
 
       // Wait for notifications to be sent
-      Wait.on { -> NotificationCenter.instance.threadPool.activeCount == 0 }.start()
+      long startTime = System.currentTimeMillis()
+      Wait.on { -> notifications.size() >= 2 || System.currentTimeMillis() - startTime > 5000 }.start()
 
       assert notifications[EventType.PROJECT_PAUSED][0].data.project in ['foo', 'bar']
       assert notifications[EventType.PROJECT_PAUSED][0].data.paused == true
