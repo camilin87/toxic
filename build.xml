@@ -57,6 +57,10 @@
     </groovyc>
   </target>
   
+  <target name="jar" depends="compile">
+    <jar destfile="${gen}/toxic.jar" basedir="${class}"/>
+  </target>
+
   <target name="test" depends="compile" description="Run unit tests">
     <delete dir="${unit}/RESULTS" />
     <mkdir dir="${unit}/RESULTS" />

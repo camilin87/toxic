@@ -1,6 +1,4 @@
 #!/bin/bash
-. toxic-common.sh
-cmd="${baseToxicCmd}"
-#cmd="${cmd} -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=9010"
-cmd="${cmd} toxic.Main $otherArgs"
+. $(dirname $0)/toxic-common.sh
+cmd="${baseToxicCmd} toxic.Main $otherArgs"
 eval $cmd

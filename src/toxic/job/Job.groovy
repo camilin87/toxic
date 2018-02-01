@@ -297,7 +297,7 @@ public class Job implements Callable, Comparable, Publisher {
     addArgIfNotPresent(args, "job.maxCommits", 10)
     addArgIfNotPresent(args, "job.init.script.0", "")
     addArgIfNotPresent(args, "job.end.script.0", "")
-    addArgIfNotPresent(args, "job.repoType", "toxic.job.HgRepository")
+    addArgIfNotPresent(args, "job.repoType", "toxic.job.GitRepository")
     addArgIfNotPresent(args, "job.repoUrl", "")
     addArgIfNotPresent(args, "job.trigger.repoCommit", "")
     addArgIfNotPresent(args, "job.trigger.startTime", "")
