@@ -1,4 +1,4 @@
-FROM centos:7
+FROM alpine:latest
 LABEL Description="Task Execution Engine"
 
 # Set the locale
@@ -9,15 +9,11 @@ ENV DOCKER_BUCKET download.docker.com
 ENV DOCKER_VERSION 17.12.0-ce
 ENV DOCKER_SHA256 05ceec7fd937e1416e5dce12b0b6e1c655907d349d52574319a1e875077ccb79
 
-RUN yum update -y && yum install -y epel-release openssl git mercurial net-tools nc openssh-clients java \
-    && yum clean all \
-    && curl -fSL "https://${DOCKER_BUCKET}/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz" -o docker.tgz \
-    # && echo "${DOCKER_SHA256} *docker.tgz" | sha256sum -c - \
-    && tar -xzvf docker.tgz \
-    && mv docker/* /usr/local/bin/ \
-    && rmdir docker \
-    && rm docker.tgz \
-    && docker -v
+RUN apk update && apk add bash curl docker git openjdk8 openssh openssl \
+    && docker -v \
+    && addgroup -g 2000 toxic \
+    && adduser -u 2000 -G toxic -D toxic \ 
+    && adduser toxic docker
 
 ARG CACHE_ITERATION=0
 
@@ -28,9 +24,12 @@ COPY lib /opt/toxic/lib/
 COPY resources /opt/toxic/resources/
 COPY gen/toxic.jar /opt/toxic/lib/
 
-VOLUME ["/data"]
-VOLUME ["/conf"]
-EXPOSE 8001
+RUN sed -i 's/ref="console"/ref="rolling"/' /opt/toxic/conf/log4j.xml \
+    && sed -i 's/${TOXIC_HOME}/\/data/' /opt/toxic/conf/log4j.xml
 
-ENTRYPOINT ["/opt/toxic/bin/toxic-ui", "-j", "/data/jobs"]
-CMD ["-s", "/conf/toxic-secure.properties", "-p", "toxic.properties"]
+VOLUME ["/data"]
+EXPOSE 8001
+USER toxic
+
+ENTRYPOINT ["/opt/toxic/bin/toxic-ui", "-j", "/data"]
+CMD ["-s", "/opt/toxic/conf/toxic-secure.properties", "-p", "toxic.properties"]
